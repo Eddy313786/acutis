@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Acutis — Digital Business Partners</title>
+<meta name="description" content="We lead digital teams, scale ecommerce, and drive AI transformation for businesses that mean it.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Grotesk:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --void: #080808;
+  --paper: #f0ece0;
+  --ember: #ff4d1c;
+  --ghost: rgba(240,236,224,0.06);
+  --rule: rgba(240,236,224,0.1);
+  --muted: rgba(240,236,224,0.38);
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'Space Grotesk', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--void);
+  color: var(--paper);
+  font-family: var(--font-body);
+  font-weight: 300;
+  overflow-x: hidden;
+  cursor: none;
+}
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9000;
+  opacity: 0.025;
+}
+.cursor-dot {
+  position: fixed; width: 6px; height: 6px;
+  background: var(--ember); border-radius: 50%;
+  pointer-events: none; z-index: 9999;
+  transform: translate(-50%,-50%);
+}
+.cursor-ring {
+  position: fixed; width: 32px; height: 32px;
+  border: 1px solid var(--ember); border-radius: 50%;
+  pointer-events: none; z-index: 9998;
+  transform: translate(-50%,-50%);
+  transition: width 0.3s, height 0.3s, border-color 0.3s;
+  opacity: 0.6;
+}
+.cursor-ring.hover { width: 56px; height: 56px; border-color: var(--paper); opacity: 1; }
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1.75rem 3rem;
+  background: linear-gradient(to bottom, rgba(8,8,8,0.95) 0%, transparent 100%);
+  transition: background 0.3s;
+}
+.nav-logo {
+  font-family: var(--font-display); font-size: 1.1rem; font-weight: 800;
+  color: var(--paper); text-decoration: none; display: flex; align-items: center; gap: 0.6rem;
+}
+.logo-fire {
+  width: 24px; height: 24px;
+}
+.nav-links { display: flex; align-items: center; gap: 0.25rem; list-style: none; }
+.nav-links a {
+  font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--muted); text-decoration: none;
+  padding: 0.45rem 0.9rem; border: 1px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+}
+.nav-links a:hover { color: var(--paper); border-color: var(--rule); }
+.nav-links a.active { color: var(--ember); border-color: rgba(255,77,28,0.3); }
+.nav-cta {
+  font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--void); background: var(--ember);
+  padding: 0.55rem 1.25rem; text-decoration: none; transition: opacity 0.2s;
+}
+.nav-cta:hover { opacity: 0.85; }
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 0 3rem 4rem;
+  position: relative;
+  overflow: hidden;
+}
+.hero-grid-bg {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(240,236,224,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(240,236,224,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 30%, transparent 80%);
+}
+.hero-ember-glow {
+  position: absolute;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(255,77,28,0.12) 0%, transparent 70%);
+  top: 10%; right: -100px;
+  pointer-events: none;
+}
+.hero-counter {
+  position: absolute;
+  top: 45%; right: 3rem;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--muted);
+  letter-spacing: 0.15em;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+}
+.hero-tag {
+  font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--ember);
+  display: flex; align-items: center; gap: 0.75rem;
+  margin-bottom: 2rem;
+  opacity: 0; animation: fadeUp 0.7s 0.2s forwards;
+}
+.hero-tag::before { content: ''; width: 24px; height: 1px; background: var(--ember); }
+.hero-headline {
+  font-family: var(--font-display);
+  font-size: clamp(3.5rem, 9vw, 8.5rem);
+  font-weight: 800;
+  line-height: 0.92;
+  letter-spacing: -0.03em;
+  max-width: 900px;
+  opacity: 0; animation: fadeUp 0.8s 0.35s forwards;
+}
+.hero-headline .accent { color: var(--ember); }
+.hero-headline .outline {
+  -webkit-text-stroke: 1px var(--paper);
+  color: transparent;
+}
+.hero-sub-row {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  margin-top: 3.5rem;
+  opacity: 0; animation: fadeUp 0.8s 0.55s forwards;
+}
+.hero-desc {
+  font-size: 1rem; line-height: 1.75; color: var(--muted);
+  max-width: 400px;
+}
+.hero-desc strong { color: var(--paper); font-weight: 400; }
+.hero-actions { display: flex; gap: 1rem; align-items: center; }
+.btn-primary {
+  font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--void); background: var(--ember);
+  padding: 0.9rem 2rem; text-decoration: none; transition: opacity 0.2s;
+  display: inline-flex; align-items: center; gap: 0.5rem;
+}
+.btn-primary:hover { opacity: 0.85; }
+.btn-ghost {
+  font-family: var(--font-mono); font-size: 0.65rem; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--paper);
+  padding: 0.9rem 2rem; text-decoration: none;
+  border: 1px solid var(--rule); transition: border-color 0.2s;
+  display: inline-flex; align-items: center; gap: 0.5rem;
+}
+.btn-ghost:hover { border-color: rgba(240,236,224,0.4); }
+.scroll-hint {
+  position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+  font-family: var(--font-mono); font-size: 0.55rem; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--muted);
+  display: flex; flex-direction: column; align-items: center; gap: 0.75rem;
+  opacity: 0; animation: fadeIn 1s 1.2s forwards;
+}
+.scroll-line {
+  width: 1px; height: 40px; background: linear-gradient(to bottom, var(--ember), transparent);
+  animation: scrollPulse 2s infinite;
+}
+
+/* MARQUEE */
+.marquee-strip {
+  border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+  padding: 1.25rem 0; overflow: hidden;
+  display: flex;
+}
+.marquee-inner {
+  display: flex; gap: 0; white-space: nowrap;
+  animation: marquee 28s linear infinite;
+}
+.marquee-item {
+  font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--muted);
+  padding: 0 3rem;
+  display: flex; align-items: center; gap: 3rem;
+}
+.marquee-item span { color: var(--ember); font-size: 0.5rem; }
+
+/* MANIFESTO TEASER */
+.manifesto-teaser {
+  display: grid; grid-template-columns: 1fr 1fr;
+  border-top: 1px solid var(--rule);
+}
+.manifesto-left {
+  padding: 6rem 3rem;
+  border-right: 1px solid var(--rule);
+  display: flex; flex-direction: column; justify-content: space-between;
+}
+.manifesto-right {
+  padding: 6rem 3rem;
+  position: relative; overflow: hidden;
+}
+.manifesto-number {
+  font-family: var(--font-display);
+  font-size: clamp(8rem, 18vw, 16rem);
+  font-weight: 800;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(240,236,224,0.06);
+  line-height: 1;
+  position: absolute;
+  bottom: -2rem; right: -1rem;
+  pointer-events: none;
+}
+.manifesto-quote {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  max-width: 480px;
+}
+.manifesto-quote em { color: var(--ember); font-style: normal; }
+.manifesto-body {
+  font-size: 0.9rem; line-height: 1.85; color: var(--muted); max-width: 420px;
+  margin-top: 2rem;
+}
+.manifesto-link {
+  font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.15em;
+  text-transform: uppercase; color: var(--ember); text-decoration: none;
+  display: inline-flex; align-items: center; gap: 0.5rem; margin-top: 2.5rem;
+  border-bottom: 1px solid rgba(255,77,28,0.3); padding-bottom: 0.25rem;
+  transition: gap 0.2s;
+}
+.manifesto-link:hover { gap: 0.85rem; }
+
+/* SERVICES PREVIEW */
+.services-preview { border-top: 1px solid var(--rule); }
+.services-header {
+  padding: 4rem 3rem 3rem;
+  display: flex; justify-content: space-between; align-items: flex-end;
+  border-bottom: 1px solid var(--rule);
+}
+.services-header h2 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800; letter-spacing: -0.03em;
+}
+.services-list { display: grid; grid-template-columns: repeat(4, 1fr); }
+.service-card {
+  padding: 3rem 2.5rem;
+  border-right: 1px solid var(--rule);
+  position: relative; overflow: hidden;
+  transition: background 0.4s;
+  text-decoration: none; color: var(--paper);
+  display: block;
+}
+.service-card:last-child { border-right: none; }
+.service-card::before {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 2px; background: var(--ember);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform 0.4s;
+}
+.service-card:hover { background: var(--ghost); }
+.service-card:hover::before { transform: scaleX(1); }
+.service-card:hover .service-arrow { opacity: 1; transform: translate(4px,-4px); }
+.service-num {
+  font-family: var(--font-mono); font-size: 0.6rem;
+  color: var(--ember); letter-spacing: 0.15em; margin-bottom: 2.5rem;
+}
+.service-title {
+  font-family: var(--font-display);
+  font-size: 1.3rem; font-weight: 700; line-height: 1.25;
+  margin-bottom: 1rem;
+}
+.service-desc {
+  font-size: 0.82rem; line-height: 1.7; color: var(--muted);
+}
+.service-arrow {
+  position: absolute; top: 2.5rem; right: 2.5rem;
+  font-size: 1rem; color: var(--ember);
+  opacity: 0; transition: opacity 0.3s, transform 0.3s;
+}
+
+/* CLIENTS */
+.clients { border-top: 1px solid var(--rule); padding: 5rem 3rem; }
+.clients-label {
+  font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.2em;
+  text-transform: uppercase; color: var(--muted); margin-bottom: 3rem;
+  display: flex; align-items: center; gap: 0.75rem;
+}
+.clients-label::before { content: ''; width: 24px; height: 1px; background: var(--muted); }
+.clients-grid {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 0;
+}
+.client-item {
+  padding: 2rem;
+  border-right: 1px solid var(--rule);
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.3s;
+}
+.client-item:last-child { border-right: none; }
+.client-item:hover { background: var(--ghost); }
+.client-name {
+  font-family: var(--font-display); font-size: 0.85rem; font-weight: 700;
+  letter-spacing: 0.05em; color: var(--muted);
+  transition: color 0.3s;
+  text-align: center; text-transform: uppercase;
+}
+.client-item:hover .client-name { color: var(--paper); }
+
+/* TESTIMONIALS */
+.testimonials { border-top: 1px solid var(--rule); padding: 6rem 3rem; }
+.testimonials-header {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  margin-bottom: 4rem;
+}
+.testimonials-header h2 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.5vw, 2.8rem);
+  font-weight: 800; letter-spacing: -0.03em;
+}
+.testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5px; background: var(--rule); }
+.testimonial {
+  background: var(--void);
+  padding: 3rem;
+  transition: background 0.3s;
+}
+.testimonial:hover { background: var(--ghost); }
+.testimonial-quote {
+  font-family: var(--font-display);
+  font-size: 1.05rem; font-weight: 400; line-height: 1.6;
+  margin-bottom: 2.5rem;
+}
+.testimonial-quote::before { content: '"'; color: var(--ember); font-size: 2rem; line-height: 0; vertical-align: -0.5rem; margin-right: 0.2rem; }
+.testimonial-author { display: flex; flex-direction: column; gap: 0.25rem; }
+.testimonial-name {
+  font-family: var(--font-mono); font-size: 0.7rem;
+  font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+}
+.testimonial-role {
+  font-family: var(--font-mono); font-size: 0.6rem;
+  color: var(--muted); letter-spacing: 0.08em;
+}
+
+/* CTA STRIP */
+.cta-strip {
+  border-top: 1px solid var(--rule);
+  padding: 6rem 3rem;
+  display: grid; grid-template-columns: 1fr auto;
+  align-items: center; gap: 4rem;
+  background: linear-gradient(135deg, rgba(255,77,28,0.05) 0%, transparent 60%);
+}
+.cta-strip h2 {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 800; letter-spacing: -0.03em; line-height: 1;
+}
+.cta-strip h2 em { color: var(--ember); font-style: normal; }
+
+/* FOOTER */
+footer {
+  border-top: 1px solid var(--rule);
+  padding: 3rem;
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 2rem; align-items: end;
+}
+.footer-brand {
+  font-family: var(--font-display); font-size: 2rem; font-weight: 800; letter-spacing: -0.02em;
+}
+.footer-brand span { color: var(--ember); }
+.footer-links { display: flex; flex-direction: column; gap: 0.5rem; }
+.footer-links a {
+  font-family: var(--font-mono); font-size: 0.62rem; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s;
+}
+.footer-links a:hover { color: var(--paper); }
+.footer-meta {
+  text-align: right; font-family: var(--font-mono); font-size: 0.58rem;
+  color: var(--muted); letter-spacing: 0.1em; line-height: 2;
+}
+.footer-meta .ember { color: var(--ember); }
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.3; transform: scaleY(0.8); }
+  50% { opacity: 1; transform: scaleY(1); }
+}
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.8s ease, transform 0.8s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+@media (max-width: 1024px) {
+  .services-list { grid-template-columns: repeat(2, 1fr); }
+  .service-card:nth-child(2) { border-right: none; }
+  .service-card:nth-child(3) { border-top: 1px solid var(--rule); }
+  .clients-grid { grid-template-columns: repeat(3, 1fr); }
+  .client-item:nth-child(3) { border-right: none; }
+}
+@media (max-width: 768px) {
+  body { cursor: auto; }
+  .cursor-dot, .cursor-ring { display: none; }
+  nav { padding: 1.25rem 1.5rem; }
+  .nav-links { display: none; }
+  .hero { padding: 0 1.5rem 3rem; }
+  .hero-sub-row { flex-direction: column; align-items: flex-start; gap: 2rem; }
+  .manifesto-teaser { grid-template-columns: 1fr; }
+  .manifesto-left { border-right: none; border-bottom: 1px solid var(--rule); padding: 4rem 1.5rem; }
+  .manifesto-right { padding: 4rem 1.5rem; }
+  .services-list { grid-template-columns: 1fr; }
+  .service-card { border-right: none; border-bottom: 1px solid var(--rule); }
+  .clients-grid { grid-template-columns: repeat(2, 1fr); }
+  .testimonials-grid { grid-template-columns: 1fr; }
+  .cta-strip { grid-template-columns: 1fr; padding: 4rem 1.5rem; }
+  .services-header, .clients, .testimonials { padding-left: 1.5rem; padding-right: 1.5rem; }
+  footer { grid-template-columns: 1fr; padding: 2rem 1.5rem; }
+  .footer-meta { text-align: left; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor-dot" id="cursor-dot"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<nav id="nav">
+  <a href="index.html" class="nav-logo">
+    <svg class="logo-fire" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M14 2C14 2 8 8 8 14C8 17.5 10 20 10 20C10 20 9 18 10 16C11 14 13 13 13 13C13 13 11 17 14 19C17 21 18 18 18 18C18 18 20 16.5 20 14C20 10 17 6 14 2Z" fill="#ff4d1c"/>
+      <path d="M14 26C11 26 9 24 9 22C9 20 11 19 11 19C11 19 10.5 21 12 22C13 22.8 14 22 14 22C14 22 15 22.8 16 22C17.5 21 17 19 17 19C17 19 19 20 19 22C19 24 17 26 14 26Z" fill="#ff4d1c" opacity="0.6"/>
+    </svg>
+    Acutis
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html" class="active">Home</a></li>
+    <li><a href="manifest.html">Manifest</a></li>
+    <li><a href="arsenal.html">Arsenal</a></li>
+    <li><a href="ignite.html">Ignite</a></li>
+  </ul>
+  <a href="ignite.html" class="nav-cta">Let's ignite →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-ember-glow"></div>
+  <div class="hero-counter">ACT-001 / HOME</div>
+
+  <div class="hero-tag">Digital Business Partners</div>
+  <h1 class="hero-headline">
+    We make<br>
+    digital <span class="accent">burn</span><br>
+    <span class="outline">harder.</span>
+  </h1>
+  <div class="hero-sub-row">
+    <p class="hero-desc">
+      <strong>Acutis</strong> leads digital teams, enables ecommerce at scale, and drives AI transformation for companies that want to win — not just survive.
+    </p>
+    <div class="hero-actions">
+      <a href="arsenal.html" class="btn-primary">Our arsenal →</a>
+      <a href="manifest.html" class="btn-ghost">Read manifesto</a>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-strip">
+  <div class="marquee-inner">
+    <div class="marquee-item">Digital Leadership <span>✦</span> Ecommerce Scaling <span>✦</span> AI Transformation <span>✦</span> Cost Engineering <span>✦</span> Team Enablement <span>✦</span> Commercial Strategy <span>✦</span> Digital Leadership <span>✦</span> Ecommerce Scaling <span>✦</span> AI Transformation <span>✦</span> Cost Engineering <span>✦</span> Team Enablement <span>✦</span> Commercial Strategy <span>✦</span></div>
+  </div>
+</div>
+
+<!-- MANIFESTO TEASER -->
+<section class="manifesto-teaser">
+  <div class="manifesto-left reveal">
+    <div class="tag">Our belief</div>
+    <div>
+      <blockquote class="manifesto-quote">
+        Most digital agencies <em>never read a balance sheet.</em> We wrote them.
+      </blockquote>
+      <p class="manifesto-body">
+        Ten years building financial models. Nine years leading digital. The result is a rare fluency — we understand both the spreadsheet and the strategy, the cost centre and the conversion funnel.
+      </p>
+      <a href="manifest.html" class="manifesto-link">Read our manifesto →</a>
+    </div>
+  </div>
+  <div class="manifesto-right reveal" data-delay="150">
+    <div class="manifesto-number">10</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5px; background:var(--rule); height:100%;">
+      <div style="background:var(--void); padding:2.5rem; display:flex; flex-direction:column; justify-content:flex-end;">
+        <div style="font-family:var(--font-display); font-size:2.8rem; font-weight:800; color:var(--ember);">10+</div>
+        <div style="font-family:var(--font-mono); font-size:0.6rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--muted); margin-top:0.5rem;">Years in finance</div>
+      </div>
+      <div style="background:var(--void); padding:2.5rem; display:flex; flex-direction:column; justify-content:flex-end;">
+        <div style="font-family:var(--font-display); font-size:2.8rem; font-weight:800; color:var(--paper);">9+</div>
+        <div style="font-family:var(--font-mono); font-size:0.6rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--muted); margin-top:0.5rem;">Years in digital</div>
+      </div>
+      <div style="background:var(--void); padding:2.5rem; display:flex; flex-direction:column; justify-content:flex-end; grid-column:span 2;">
+        <div style="font-family:var(--font-display); font-size:2.8rem; font-weight:800; color:var(--paper);">2×</div>
+        <div style="font-family:var(--font-mono); font-size:0.6rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--muted); margin-top:0.5rem;">The languages your agency doesn't speak</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES PREVIEW -->
+<section class="services-preview reveal">
+  <div class="services-header">
+    <h2>What we ignite</h2>
+    <a href="arsenal.html" style="font-family:var(--font-mono); font-size:0.62rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color 0.2s;" onmouseover="this.style.color='var(--paper)'" onmouseout="this.style.color='var(--muted)'">Full arsenal →</a>
+  </div>
+  <div class="services-list">
+    <a href="arsenal.html#leadership" class="service-card">
+      <div class="service-num">01</div>
+      <div class="service-title">Digital Leadership</div>
+      <p class="service-desc">We embed as fractional CDO or lead your team from within. Strategy, culture, and execution — all three.</p>
+      <span class="service-arrow">↗</span>
+    </a>
+    <a href="arsenal.html#ecommerce" class="service-card">
+      <div class="service-num">02</div>
+      <div class="service-title">Ecommerce Scaling</div>
+      <p class="service-desc">From platform architecture to commercial optimisation. We've scaled channels that actually convert.</p>
+      <span class="service-arrow">↗</span>
+    </a>
+    <a href="arsenal.html#ai" class="service-card">
+      <div class="service-num">03</div>
+      <div class="service-title">AI Transformation</div>
+      <p class="service-desc">Not a buzzword tour. Practical, commercial AI integration that cuts cost and accelerates output.</p>
+      <span class="service-arrow">↗</span>
+    </a>
+    <a href="arsenal.html#cost" class="service-card">
+      <div class="service-num">04</div>
+      <div class="service-title">Cost Engineering</div>
+      <p class="service-desc">With a CFO's instinct and a digital director's eye — we find the margin others miss.</p>
+      <span class="service-arrow">↗</span>
+    </a>
+  </div>
+</section>
+
+<!-- CLIENTS -->
+<section class="clients reveal">
+  <div class="clients-label">Trusted by</div>
+  <div class="clients-grid">
+    <div class="client-item"><span class="client-name">Colruyt Group</span></div>
+    <div class="client-item"><span class="client-name">Belfius</span></div>
+    <div class="client-item"><span class="client-name">Kinepolis</span></div>
+    <div class="client-item"><span class="client-name">Telenet</span></div>
+    <div class="client-item"><span class="client-name">Liantis</span></div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+  <div class="testimonials-header reveal">
+    <h2>Field reports</h2>
+    <span style="font-family:var(--font-mono); font-size:0.62rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--muted);">Client testimonials</span>
+  </div>
+  <div class="testimonials-grid">
+    <div class="testimonial reveal">
+      <p class="testimonial-quote">Ward brought something we rarely see — someone who could challenge our CFO on margin and our CMO on channel strategy. In the same meeting.</p>
+      <div class="testimonial-author">
+        <span class="testimonial-name">Sophie Vermeersch</span>
+        <span class="testimonial-role">Chief Commercial Officer — Belgian Retail Group</span>
+      </div>
+    </div>
+    <div class="testimonial reveal" data-delay="120">
+      <p class="testimonial-quote">The AI transformation programme Acutis designed saved us more in six months than our previous agency spent in two years. The numbers don't lie.</p>
+      <div class="testimonial-author">
+        <span class="testimonial-name">Pieter Janssen</span>
+        <span class="testimonial-role">CEO — Mid-market Ecommerce Group</span>
+      </div>
+    </div>
+    <div class="testimonial reveal" data-delay="240">
+      <p class="testimonial-quote">They're not a vendor. They think like co-founders. Our digital revenue grew 40% in the first year of working together — without adding headcount.</p>
+      <div class="testimonial-author">
+        <span class="testimonial-name">Lien Desmet</span>
+        <span class="testimonial-role">Founder — DTC Fashion Brand</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA STRIP -->
+<section class="cta-strip reveal">
+  <h2>Ready to make<br>your digital <em>burn</em>?</h2>
+  <a href="ignite.html" class="btn-primary" style="white-space:nowrap; font-size:0.75rem; padding:1.1rem 2.5rem;">Ignite the conversation →</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-brand">Acutis<span>.</span></div>
+    <div style="font-family:var(--font-mono); font-size:0.58rem; color:var(--muted); letter-spacing:0.1em; margin-top:0.75rem;">Digital Business Partners</div>
+  </div>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="manifest.html">Manifest</a>
+    <a href="arsenal.html">Arsenal</a>
+    <a href="ignite.html">Ignite</a>
+  </div>
+  <div class="footer-meta">
+    <div>acut.is</div>
+    <div class="ember">Named for Carlo Acutis</div>
+    <div>Patron saint of the internet</div>
+    <div style="margin-top:0.5rem;">© 2026 Acutis</div>
+  </div>
+</footer>
+
+<script>
+const dot = document.getElementById('cursor-dot');
+const ring = document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px';});
+(function anim(){rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(anim);})();
+document.querySelectorAll('a,button').forEach(el=>{el.addEventListener('mouseenter',()=>ring.classList.add('hover'));el.addEventListener('mouseleave',()=>ring.classList.remove('hover'));});
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>{nav.style.background=window.scrollY>80?'rgba(8,8,8,0.97)':'linear-gradient(to bottom,rgba(8,8,8,0.95) 0%,transparent 100%)';});
+const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),e.target.dataset.delay||0);}),{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>

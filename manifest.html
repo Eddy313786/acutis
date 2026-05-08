@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manifest — Acutis</title>
+<meta name="description" content="Why we exist. What we believe. How we see the digital world.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Grotesk:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --void: #080808;
+  --paper: #f0ece0;
+  --ember: #ff4d1c;
+  --ghost: rgba(240,236,224,0.06);
+  --rule: rgba(240,236,224,0.1);
+  --muted: rgba(240,236,224,0.38);
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'Space Grotesk', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--void);color:var(--paper);font-family:var(--font-body);font-weight:300;overflow-x:hidden;cursor:none;}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");pointer-events:none;z-index:9000;opacity:0.025;}
+.cursor-dot{position:fixed;width:6px;height:6px;background:var(--ember);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);}
+.cursor-ring{position:fixed;width:32px;height:32px;border:1px solid var(--ember);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width 0.3s,height 0.3s,border-color 0.3s;opacity:0.6;}
+.cursor-ring.hover{width:56px;height:56px;border-color:var(--paper);opacity:1;}
+nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;justify-content:space-between;align-items:center;padding:1.75rem 3rem;background:linear-gradient(to bottom,rgba(8,8,8,0.95) 0%,transparent 100%);transition:background 0.3s;}
+.nav-logo{font-family:var(--font-display);font-size:1.1rem;font-weight:800;color:var(--paper);text-decoration:none;display:flex;align-items:center;gap:0.6rem;}
+.nav-links{display:flex;align-items:center;gap:0.25rem;list-style:none;}
+.nav-links a{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);text-decoration:none;padding:0.45rem 0.9rem;border:1px solid transparent;transition:color 0.2s,border-color 0.2s;}
+.nav-links a:hover{color:var(--paper);border-color:var(--rule);}
+.nav-links a.active{color:var(--ember);border-color:rgba(255,77,28,0.3);}
+.nav-cta{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--void);background:var(--ember);padding:0.55rem 1.25rem;text-decoration:none;transition:opacity 0.2s;}
+.nav-cta:hover{opacity:0.85;}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity 0.8s ease,transform 0.8s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+
+/* PAGE HERO */
+.page-hero{
+  min-height:70vh;
+  padding:10rem 3rem 5rem;
+  position:relative; overflow:hidden;
+  display:flex; flex-direction:column; justify-content:flex-end;
+  border-bottom:1px solid var(--rule);
+}
+.page-hero-bg{
+  position:absolute;inset:0;
+  background: linear-gradient(135deg, rgba(255,77,28,0.08) 0%, transparent 50%);
+}
+.page-hero-lines{
+  position:absolute;inset:0;
+  background-image:repeating-linear-gradient(
+    -45deg,
+    transparent,transparent 40px,
+    rgba(240,236,224,0.02) 40px,rgba(240,236,224,0.02) 41px
+  );
+}
+.page-tag{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--ember);display:flex;align-items:center;gap:0.75rem;margin-bottom:2rem;opacity:0;animation:fadeUp 0.7s 0.2s forwards;}
+.page-tag::before{content:'';width:24px;height:1px;background:var(--ember);}
+.page-hero h1{font-family:var(--font-display);font-size:clamp(3rem,8vw,7rem);font-weight:800;line-height:0.95;letter-spacing:-0.03em;max-width:800px;opacity:0;animation:fadeUp 0.8s 0.35s forwards;}
+.page-hero h1 em{color:var(--ember);font-style:normal;}
+.page-hero-sub{font-size:1.05rem;line-height:1.75;color:var(--muted);max-width:500px;margin-top:2.5rem;opacity:0;animation:fadeUp 0.8s 0.5s forwards;}
+.page-counter{position:absolute;top:40%;right:3rem;font-family:var(--font-mono);font-size:0.6rem;color:var(--muted);letter-spacing:0.15em;writing-mode:vertical-rl;transform:rotate(180deg);}
+
+/* MANIFESTO BODY */
+.manifesto-body-section{
+  display:grid;grid-template-columns:280px 1fr;
+  border-bottom:1px solid var(--rule);
+}
+.manifesto-sidebar{
+  padding:5rem 3rem;border-right:1px solid var(--rule);
+  position:sticky;top:0;height:fit-content;
+}
+.manifesto-sidebar-nav{display:flex;flex-direction:column;gap:0.5rem;}
+.sidebar-link{
+  font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.12em;
+  text-transform:uppercase;color:var(--muted);text-decoration:none;
+  padding:0.5rem 0;border-left:2px solid transparent;padding-left:1rem;
+  transition:color 0.2s,border-color 0.2s;
+}
+.sidebar-link:hover,.sidebar-link.active{color:var(--paper);border-color:var(--ember);}
+
+.manifesto-content{padding:5rem 4rem;}
+.manifesto-chapter{margin-bottom:6rem;padding-bottom:6rem;border-bottom:1px solid var(--rule);}
+.manifesto-chapter:last-child{border-bottom:none;}
+.chapter-num{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--ember);margin-bottom:1.5rem;}
+.chapter-title{font-family:var(--font-display);font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:800;letter-spacing:-0.02em;line-height:1.15;margin-bottom:2rem;}
+.chapter-title em{color:var(--ember);font-style:normal;}
+.chapter-body{font-size:1rem;line-height:1.9;color:var(--muted);max-width:580px;}
+.chapter-body p{margin-bottom:1.5rem;}
+.chapter-body strong{color:var(--paper);font-weight:500;}
+.chapter-pull{
+  font-family:var(--font-display);font-size:1.4rem;font-weight:700;
+  line-height:1.4;color:var(--paper);
+  border-left:3px solid var(--ember);padding-left:2rem;
+  margin:3rem 0;
+}
+
+/* PRINCIPLES */
+.principles{border-bottom:1px solid var(--rule);}
+.principles-header{padding:4rem 3rem 3rem;border-bottom:1px solid var(--rule);}
+.principles-header h2{font-family:var(--font-display);font-size:clamp(2rem,4vw,3rem);font-weight:800;letter-spacing:-0.03em;}
+.principles-grid{display:grid;grid-template-columns:repeat(3,1fr);}
+.principle-item{padding:3.5rem 3rem;border-right:1px solid var(--rule);border-bottom:1px solid var(--rule);}
+.principle-item:nth-child(3n){border-right:none;}
+.principle-item:nth-last-child(-n+3){border-bottom:none;}
+.principle-num{font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.15em;color:var(--ember);margin-bottom:1.5rem;}
+.principle-title{font-family:var(--font-display);font-size:1.25rem;font-weight:700;margin-bottom:1rem;line-height:1.3;}
+.principle-desc{font-size:0.85rem;line-height:1.75;color:var(--muted);}
+
+/* ABOUT WARD */
+.about-ward{
+  display:grid;grid-template-columns:1fr 1fr;
+  border-bottom:1px solid var(--rule);
+}
+.about-ward-left{padding:6rem 3rem;border-right:1px solid var(--rule);}
+.about-ward-right{padding:6rem 3rem;position:relative;overflow:hidden;}
+.about-ward-title{font-family:var(--font-display);font-size:clamp(2rem,4vw,3.2rem);font-weight:800;letter-spacing:-0.02em;line-height:1.15;margin-bottom:2.5rem;}
+.about-ward-title em{color:var(--ember);font-style:normal;}
+.about-ward-body{font-size:0.95rem;line-height:1.9;color:var(--muted);max-width:440px;}
+.about-ward-body p{margin-bottom:1.5rem;}
+.about-ward-body strong{color:var(--paper);font-weight:500;}
+.timeline{display:flex;flex-direction:column;gap:0;}
+.timeline-item{
+  display:grid;grid-template-columns:80px 1fr;
+  padding:2rem 0;border-bottom:1px solid var(--rule);
+  align-items:start;
+}
+.timeline-item:last-child{border-bottom:none;}
+.timeline-year{font-family:var(--font-mono);font-size:0.65rem;color:var(--ember);letter-spacing:0.1em;padding-top:0.2rem;}
+.timeline-event-title{font-family:var(--font-display);font-size:1rem;font-weight:700;margin-bottom:0.4rem;}
+.timeline-event-desc{font-size:0.82rem;color:var(--muted);line-height:1.6;}
+
+/* CTA */
+.cta-strip{border-top:1px solid var(--rule);padding:6rem 3rem;display:grid;grid-template-columns:1fr auto;align-items:center;gap:4rem;background:linear-gradient(135deg,rgba(255,77,28,0.05) 0%,transparent 60%);}
+.cta-strip h2{font-family:var(--font-display);font-size:clamp(2.5rem,5vw,4rem);font-weight:800;letter-spacing:-0.03em;line-height:1;}
+.cta-strip h2 em{color:var(--ember);font-style:normal;}
+.btn-primary{font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--void);background:var(--ember);padding:0.9rem 2rem;text-decoration:none;transition:opacity 0.2s;display:inline-flex;align-items:center;gap:0.5rem;white-space:nowrap;}
+.btn-primary:hover{opacity:0.85;}
+
+/* FOOTER */
+footer{border-top:1px solid var(--rule);padding:3rem;display:grid;grid-template-columns:1fr 1fr 1fr;gap:2rem;align-items:end;}
+.footer-brand{font-family:var(--font-display);font-size:2rem;font-weight:800;letter-spacing:-0.02em;}
+.footer-brand span{color:var(--ember);}
+.footer-links{display:flex;flex-direction:column;gap:0.5rem;}
+.footer-links a{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.2s;}
+.footer-links a:hover{color:var(--paper);}
+.footer-meta{text-align:right;font-family:var(--font-mono);font-size:0.58rem;color:var(--muted);letter-spacing:0.1em;line-height:2;}
+.footer-meta .ember{color:var(--ember);}
+
+@media(max-width:1024px){.manifesto-body-section{grid-template-columns:1fr;}.manifesto-sidebar{display:none;}.about-ward{grid-template-columns:1fr;}.about-ward-left{border-right:none;border-bottom:1px solid var(--rule);}}
+@media(max-width:768px){body{cursor:auto;}.cursor-dot,.cursor-ring{display:none;}nav{padding:1.25rem 1.5rem;}.nav-links{display:none;}.page-hero{padding:8rem 1.5rem 3rem;}.manifesto-content{padding:3rem 1.5rem;}.principles-grid{grid-template-columns:1fr;}.principle-item{border-right:none;}.about-ward-left,.about-ward-right{padding:3rem 1.5rem;}.cta-strip{grid-template-columns:1fr;padding:4rem 1.5rem;}footer{grid-template-columns:1fr;padding:2rem 1.5rem;}.footer-meta{text-align:left;}}
+</style>
+</head>
+<body>
+<div class="cursor-dot" id="cursor-dot"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<nav id="nav">
+  <a href="index.html" class="nav-logo">
+    <svg width="24" height="24" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M14 2C14 2 8 8 8 14C8 17.5 10 20 10 20C10 20 9 18 10 16C11 14 13 13 13 13C13 13 11 17 14 19C17 21 18 18 18 18C18 18 20 16.5 20 14C20 10 17 6 14 2Z" fill="#ff4d1c"/>
+      <path d="M14 26C11 26 9 24 9 22C9 20 11 19 11 19C11 19 10.5 21 12 22C13 22.8 14 22 14 22C14 22 15 22.8 16 22C17.5 21 17 19 17 19C17 19 19 20 19 22C19 24 17 26 14 26Z" fill="#ff4d1c" opacity="0.6"/>
+    </svg>
+    Acutis
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="manifest.html" class="active">Manifest</a></li>
+    <li><a href="arsenal.html">Arsenal</a></li>
+    <li><a href="ignite.html">Ignite</a></li>
+  </ul>
+  <a href="ignite.html" class="nav-cta">Let's ignite →</a>
+</nav>
+
+<section class="page-hero">
+  <div class="page-hero-bg"></div>
+  <div class="page-hero-lines"></div>
+  <div class="page-counter">ACT-002 / MANIFEST</div>
+  <div class="page-tag">Why we exist</div>
+  <h1>We believe digital<br>should <em>pay</em> for itself.</h1>
+  <p class="page-hero-sub">A declaration of intent from people who've sat on both sides of the table — and know exactly where the money goes.</p>
+</section>
+
+<div class="manifesto-body-section">
+  <aside class="manifesto-sidebar">
+    <nav class="manifesto-sidebar-nav">
+      <a href="#chapter-1" class="sidebar-link active">The problem</a>
+      <a href="#chapter-2" class="sidebar-link">Our origin</a>
+      <a href="#chapter-3" class="sidebar-link">What we do differently</a>
+      <a href="#chapter-4" class="sidebar-link">The Acutis way</a>
+    </nav>
+  </aside>
+
+  <div class="manifesto-content">
+    <div class="manifesto-chapter reveal" id="chapter-1">
+      <div class="chapter-num">01 — The problem</div>
+      <h2 class="chapter-title">Most digital investment<br>disappears into a <em>black hole.</em></h2>
+      <div class="chapter-body">
+        <p>Walk into any boardroom in Belgium today and ask the CFO what their digital investment actually returned last year. Watch the silence. Maybe a deck materialises. Slides about "brand awareness" and "digital touchpoints" and "omnichannel journeys."</p>
+        <p><strong>No P&L impact. No unit economics. No line in the accounts.</strong></p>
+        <p>This is the dirty secret of the digital industry: most agencies are selling activity, not outcomes. They're optimising for impressions when you need margin. For sessions when you need conversion. For "digital transformation" when you need a functioning business model that scales.</p>
+      </div>
+      <div class="chapter-pull">
+        "The best digital strategy in the world is worthless if it can't survive contact with a balance sheet."
+      </div>
+      <div class="chapter-body">
+        <p>We've watched companies spend millions on digital and wonder why EBITDA didn't move. We've seen agencies present vanity metrics to boards that desperately needed commercial intelligence. And we got tired of it.</p>
+      </div>
+    </div>
+
+    <div class="manifesto-chapter reveal" id="chapter-2">
+      <div class="chapter-num">02 — Our origin</div>
+      <h2 class="chapter-title">Ten years counting money.<br>Nine years <em>moving</em> it.</h2>
+      <div class="chapter-body">
+        <p>Acutis was built from an unusual foundation. Before leading digital, we spent a decade as a chief accountant and tax specialist — building the kind of commercial instinct that can't be faked in a workshop or taught in a course.</p>
+        <p><strong>We know what a cost centre looks like. We know how margin gets destroyed. We know exactly which digital investments compound and which ones evaporate.</strong></p>
+        <p>Then we crossed over. Not because the numbers bored us — but because we saw how few digital leaders actually understood them. We saw an opportunity to do something genuinely different: bring rigorous financial thinking into the heart of digital strategy.</p>
+        <p>Nine years later, that dual fluency is our edge. We can sit in the CFO's office and talk EBITDA impact in the morning, then lead a product sprint in the afternoon. Both rooms trust us. Neither can replace us.</p>
+      </div>
+    </div>
+
+    <div class="manifesto-chapter reveal" id="chapter-3">
+      <div class="chapter-num">03 — What we do differently</div>
+      <h2 class="chapter-title">We measure everything<br>in <em>real currency.</em></h2>
+      <div class="chapter-body">
+        <p>When we take on an engagement, we start where others finish: with the commercial model. What does success actually look like in your accounts? What's the cost of inaction? What margin is being left on the table right now?</p>
+        <p><strong>Every recommendation we make is anchored in financial reality.</strong> Not because we're conservative — but because sustainable digital growth requires a business model that holds.</p>
+        <p>We don't do "digital for digital's sake." We don't sell you transformation theatre. We don't build roadmaps that can't survive a budget review.</p>
+      </div>
+      <div class="chapter-pull">
+        "We're not here to impress you with technology. We're here to improve your business with it."
+      </div>
+      <div class="chapter-body">
+        <p>What we do instead: we find where your digital operation is leaking value, where your team is stuck, where AI can accelerate without destroying, and where ecommerce can scale without burning cash. Then we fix it — with you, not for you.</p>
+      </div>
+    </div>
+
+    <div class="manifesto-chapter reveal" id="chapter-4">
+      <div class="chapter-num">04 — The Acutis way</div>
+      <h2 class="chapter-title">Named for the patron saint<br>of the <em>internet.</em></h2>
+      <div class="chapter-body">
+        <p>Carlo Acutis. Born 1991, died 2006. A kid who taught himself to code, built websites for parishes across Italy, and was beatified in 2020. The Church's first millennial saint — and patron of the internet.</p>
+        <p><strong>We chose the name deliberately.</strong> Not for the religiosity — but for what it represents: the idea that technology, used with purpose and integrity, can serve something greater than itself.</p>
+        <p>That's what we're trying to build. A digital practice that serves the businesses it works with, the teams it leads, and the customers those businesses serve. With honesty about what works, what doesn't, and what it costs.</p>
+        <p>No miracles. Just results you can put in the accounts.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PRINCIPLES -->
+<section class="principles">
+  <div class="principles-header reveal">
+    <div style="font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--ember);display:flex;align-items:center;gap:0.75rem;margin-bottom:1.5rem;"><span style="display:inline-block;width:24px;height:1px;background:var(--ember);"></span>How we operate</div>
+    <h2>Six principles we<br>don't compromise on.</h2>
+  </div>
+  <div class="principles-grid">
+    <div class="principle-item reveal">
+      <div class="principle-num">P.01</div>
+      <div class="principle-title">Commercial before creative</div>
+      <p class="principle-desc">Every digital decision starts with a commercial question. If we can't model the impact, we won't recommend it.</p>
+    </div>
+    <div class="principle-item reveal" data-delay="80">
+      <div class="principle-num">P.02</div>
+      <div class="principle-title">Embedded, not advisory</div>
+      <p class="principle-desc">We work inside your team, not around it. Real change happens from the inside. We don't send decks, we lead sprints.</p>
+    </div>
+    <div class="principle-item reveal" data-delay="160">
+      <div class="principle-num">P.03</div>
+      <div class="principle-title">AI with accountability</div>
+      <p class="principle-desc">We implement AI where it saves real money or creates real leverage. Not because it's trending. Because it works.</p>
+    </div>
+    <div class="principle-item reveal">
+      <div class="principle-num">P.04</div>
+      <div class="principle-title">Honest about cost</div>
+      <p class="principle-desc">We'll tell you when something is too expensive for what it returns. Even when that's uncomfortable. Especially then.</p>
+    </div>
+    <div class="principle-item reveal" data-delay="80">
+      <div class="principle-num">P.05</div>
+      <div class="principle-title">Teams over technology</div>
+      <p class="principle-desc">The best platform is useless without the right people using it right. We build capability, not dependency.</p>
+    </div>
+    <div class="principle-item reveal" data-delay="160">
+      <div class="principle-num">P.06</div>
+      <div class="principle-title">Results in the accounts</div>
+      <p class="principle-desc">If we can't point to a line in your P&L after six months, we haven't done our job. Simple as that.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT WARD -->
+<section class="about-ward">
+  <div class="about-ward-left reveal">
+    <div style="font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--ember);display:flex;align-items:center;gap:0.75rem;margin-bottom:2.5rem;"><span style="display:inline-block;width:24px;height:1px;background:var(--ember);"></span>The founder</div>
+    <h2 class="about-ward-title">Ward.<br>Digital director.<br><em>Reformed CFO.</em></h2>
+    <div class="about-ward-body">
+      <p>The person behind Acutis spent the first decade of their career as a chief accountant and tax specialist — building a commercial fluency that most digital directors never develop.</p>
+      <p>Nine years ago, they crossed into digital leadership. Not as a career pivot, but as a deliberate move to bring financial rigour into an industry that desperately needed it.</p>
+      <p><strong>The result: a rare profile. Someone who can lead a digital team, challenge a CFO, build a business case, and run an AI transformation — all from the same chair.</strong></p>
+      <p>Based in Belgium. Working across Europe. Always available for a direct conversation about what your digital actually costs — and what it should return.</p>
+    </div>
+  </div>
+  <div class="about-ward-right reveal" data-delay="150">
+    <div style="font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:3rem;display:flex;align-items:center;gap:0.75rem;"><span style="display:inline-block;width:24px;height:1px;background:var(--muted);"></span>Career timeline</div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-year">2005–<br>2015</div>
+        <div>
+          <div class="timeline-event-title">Chief Accountant & Tax Specialist</div>
+          <div class="timeline-event-desc">10 years building commercial instinct. P&L ownership, tax strategy, financial modelling. Learning what money actually does in a business.</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2015–<br>2020</div>
+        <div>
+          <div class="timeline-event-title">First digital leadership role</div>
+          <div class="timeline-event-desc">Making the crossing. Bringing financial rigour into digital strategy. Building the first version of the Acutis methodology.</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2020–<br>2024</div>
+        <div>
+          <div class="timeline-event-title">Digital Director</div>
+          <div class="timeline-event-desc">Leading teams, scaling ecommerce, running AI programmes. Proving the dual-fluency model at scale.</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2024–<br>Now</div>
+        <div>
+          <div class="timeline-event-title">Acutis founded</div>
+          <div class="timeline-event-desc">Taking the methodology to market. Working with companies who want commercial digital leadership — not just digital activity.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-strip reveal">
+  <h2>Convinced?<br>Let's <em>ignite</em> it.</h2>
+  <a href="ignite.html" class="btn-primary" style="font-size:0.75rem;padding:1.1rem 2.5rem;">Start the conversation →</a>
+</section>
+
+<footer>
+  <div>
+    <div class="footer-brand">Acutis<span>.</span></div>
+    <div style="font-family:var(--font-mono);font-size:0.58rem;color:var(--muted);letter-spacing:0.1em;margin-top:0.75rem;">Digital Business Partners</div>
+  </div>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="manifest.html">Manifest</a>
+    <a href="arsenal.html">Arsenal</a>
+    <a href="ignite.html">Ignite</a>
+  </div>
+  <div class="footer-meta">
+    <div>acut.is</div>
+    <div class="ember">Named for Carlo Acutis</div>
+    <div>Patron saint of the internet</div>
+    <div style="margin-top:0.5rem;">© 2026 Acutis</div>
+  </div>
+</footer>
+
+<script>
+const dot=document.getElementById('cursor-dot'),ring=document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px';});
+(function anim(){rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(anim);})();
+document.querySelectorAll('a,button').forEach(el=>{el.addEventListener('mouseenter',()=>ring.classList.add('hover'));el.addEventListener('mouseleave',()=>ring.classList.remove('hover'));});
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>{nav.style.background=window.scrollY>80?'rgba(8,8,8,0.97)':'linear-gradient(to bottom,rgba(8,8,8,0.95) 0%,transparent 100%)';});
+const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),e.target.dataset.delay||0);}),{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+// Sidebar active state
+const chapters=document.querySelectorAll('.manifesto-chapter');
+const links=document.querySelectorAll('.sidebar-link');
+window.addEventListener('scroll',()=>{
+  let current='';
+  chapters.forEach(ch=>{if(window.scrollY>=ch.offsetTop-200)current=ch.id;});
+  links.forEach(l=>{l.classList.toggle('active',l.getAttribute('href')==='#'+current);});
+});
+</script>
+</body>
+</html>
