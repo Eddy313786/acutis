@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Grotesk:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
-:root{--void:#080808;--paper:#f0ece0;--ember:#ff4d1c;--ghost:rgba(240,236,224,0.06);--rule:rgba(240,236,224,0.1);--muted:rgba(240,236,224,0.38);--font-display:'Syne',sans-serif;--font-body:'Space Grotesk',sans-serif;--font-mono:'Space Mono',monospace;}
+:root{--void:#ffffff;--paper:#0d0d0d;--ember:#ff4d1c;--ghost:rgba(0,0,0,0.04);--rule:rgba(0,0,0,0.1);--muted:rgba(0,0,0,0.5);--font-display:'Syne',sans-serif;--font-body:'Space Grotesk',sans-serif;--font-mono:'Space Mono',monospace;}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
 body{background:var(--void);color:var(--paper);font-family:var(--font-body);font-weight:300;overflow-x:hidden;cursor:none;}
@@ -17,7 +17,7 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 .cursor-dot{position:fixed;width:6px;height:6px;background:var(--ember);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);}
 .cursor-ring{position:fixed;width:32px;height:32px;border:1px solid var(--ember);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width 0.3s,height 0.3s,border-color 0.3s;opacity:0.6;}
 .cursor-ring.hover{width:56px;height:56px;border-color:var(--paper);opacity:1;}
-nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;justify-content:space-between;align-items:center;padding:1.75rem 3rem;background:linear-gradient(to bottom,rgba(8,8,8,0.95) 0%,transparent 100%);transition:background 0.3s;}
+nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;justify-content:space-between;align-items:center;padding:1.75rem 3rem;background:linear-gradient(to bottom,rgba(255,255,255,0.97) 0%,transparent 100%);transition:background 0.3s;}
 .nav-logo{font-family:var(--font-display);font-size:1.1rem;font-weight:800;color:var(--paper);text-decoration:none;display:flex;align-items:center;gap:0.6rem;}
 .nav-links{display:flex;align-items:center;gap:0.25rem;list-style:none;}
 .nav-links a{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);text-decoration:none;padding:0.45rem 0.9rem;border:1px solid transparent;transition:color 0.2s,border-color 0.2s;}
@@ -94,7 +94,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;justify-content
 .format-card::after{content:attr(data-label);position:absolute;top:2.5rem;right:2.5rem;font-family:var(--font-mono);font-size:0.55rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--ember);border:1px solid rgba(255,77,28,0.3);padding:0.3rem 0.6rem;}
 .format-title{font-family:var(--font-display);font-size:1.4rem;font-weight:700;line-height:1.3;margin-bottom:0.5rem;margin-top:1rem;}
 .format-desc{font-size:0.85rem;line-height:1.75;color:var(--muted);margin-top:1rem;}
-.format-ideal{margin-top:2rem;font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(240,236,224,0.3);}
+.format-ideal{margin-top:2rem;font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(0,0,0,0.3);}
 .format-ideal strong{color:var(--muted);}
 
 /* CTA */
@@ -416,7 +416,7 @@ document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.le
 (function anim(){rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(anim);})();
 document.querySelectorAll('a,button').forEach(el=>{el.addEventListener('mouseenter',()=>ring.classList.add('hover'));el.addEventListener('mouseleave',()=>ring.classList.remove('hover'));});
 const nav=document.getElementById('nav');
-window.addEventListener('scroll',()=>{nav.style.background=window.scrollY>80?'rgba(8,8,8,0.97)':'linear-gradient(to bottom,rgba(8,8,8,0.95) 0%,transparent 100%)';});
+window.addEventListener('scroll',()=>{nav.style.background=window.scrollY>80?'rgba(255,255,255,0.97)':'linear-gradient(to bottom,rgba(255,255,255,0.97) 0%,transparent 100%)';});
 const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),e.target.dataset.delay||0);}),{threshold:0.1});
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 </script>
