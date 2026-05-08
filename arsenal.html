@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arsenal — Acutis</title>
+<meta name="description" content="What we do. How we do it. What it costs you not to.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Grotesk:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--void:#080808;--paper:#f0ece0;--ember:#ff4d1c;--ghost:rgba(240,236,224,0.06);--rule:rgba(240,236,224,0.1);--muted:rgba(240,236,224,0.38);--font-display:'Syne',sans-serif;--font-body:'Space Grotesk',sans-serif;--font-mono:'Space Mono',monospace;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--void);color:var(--paper);font-family:var(--font-body);font-weight:300;overflow-x:hidden;cursor:none;}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");pointer-events:none;z-index:9000;opacity:0.025;}
+.cursor-dot{position:fixed;width:6px;height:6px;background:var(--ember);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);}
+.cursor-ring{position:fixed;width:32px;height:32px;border:1px solid var(--ember);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width 0.3s,height 0.3s,border-color 0.3s;opacity:0.6;}
+.cursor-ring.hover{width:56px;height:56px;border-color:var(--paper);opacity:1;}
+nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;justify-content:space-between;align-items:center;padding:1.75rem 3rem;background:linear-gradient(to bottom,rgba(8,8,8,0.95) 0%,transparent 100%);transition:background 0.3s;}
+.nav-logo{font-family:var(--font-display);font-size:1.1rem;font-weight:800;color:var(--paper);text-decoration:none;display:flex;align-items:center;gap:0.6rem;}
+.nav-links{display:flex;align-items:center;gap:0.25rem;list-style:none;}
+.nav-links a{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);text-decoration:none;padding:0.45rem 0.9rem;border:1px solid transparent;transition:color 0.2s,border-color 0.2s;}
+.nav-links a:hover{color:var(--paper);border-color:var(--rule);}
+.nav-links a.active{color:var(--ember);border-color:rgba(255,77,28,0.3);}
+.nav-cta{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--void);background:var(--ember);padding:0.55rem 1.25rem;text-decoration:none;transition:opacity 0.2s;}
+.nav-cta:hover{opacity:0.85;}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity 0.8s ease,transform 0.8s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
+
+/* PAGE HERO */
+.page-hero{min-height:65vh;padding:10rem 3rem 5rem;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;border-bottom:1px solid var(--rule);}
+.page-hero-bg{position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,77,28,0.06) 0%,transparent 50%);}
+.page-counter{position:absolute;top:40%;right:3rem;font-family:var(--font-mono);font-size:0.6rem;color:var(--muted);letter-spacing:0.15em;writing-mode:vertical-rl;transform:rotate(180deg);}
+.page-tag{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--ember);display:flex;align-items:center;gap:0.75rem;margin-bottom:2rem;opacity:0;animation:fadeUp 0.7s 0.2s forwards;}
+.page-tag::before{content:'';width:24px;height:1px;background:var(--ember);}
+.page-hero h1{font-family:var(--font-display);font-size:clamp(3rem,8vw,7rem);font-weight:800;line-height:0.95;letter-spacing:-0.03em;max-width:900px;opacity:0;animation:fadeUp 0.8s 0.35s forwards;}
+.page-hero h1 em{color:var(--ember);font-style:normal;}
+.page-hero h1 .outline{-webkit-text-stroke:1px var(--paper);color:transparent;}
+.page-hero-sub{font-size:1.05rem;line-height:1.75;color:var(--muted);max-width:520px;margin-top:2.5rem;opacity:0;animation:fadeUp 0.8s 0.5s forwards;}
+
+/* SERVICE DETAIL */
+.service-section{border-bottom:1px solid var(--rule);}
+.service-section:last-of-type{border-bottom:none;}
+.service-inner{display:grid;grid-template-columns:1fr 1.6fr;min-height:500px;}
+.service-inner.reverse{direction:rtl;}
+.service-inner.reverse>*{direction:ltr;}
+.service-info{padding:5rem 3rem;border-right:1px solid var(--rule);display:flex;flex-direction:column;justify-content:space-between;}
+.service-inner.reverse .service-info{border-right:none;border-left:1px solid var(--rule);}
+.service-detail{padding:5rem 4rem;background:var(--void);}
+.service-inner.reverse .service-detail{background:rgba(255,77,28,0.03);}
+.service-num{font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.15em;color:var(--ember);margin-bottom:1.5rem;}
+.service-title{font-family:var(--font-display);font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:800;letter-spacing:-0.02em;line-height:1.1;margin-bottom:1.5rem;}
+.service-title em{color:var(--ember);font-style:normal;}
+.service-tagline{font-size:0.9rem;line-height:1.75;color:var(--muted);margin-bottom:2.5rem;}
+.service-what{font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:1.5rem;display:flex;align-items:center;gap:0.5rem;}
+.service-what::before{content:'';width:16px;height:1px;background:var(--muted);}
+.deliverables{list-style:none;display:flex;flex-direction:column;gap:0.75rem;margin-bottom:3rem;}
+.deliverables li{font-size:0.88rem;line-height:1.6;color:var(--paper);padding-left:1.5rem;position:relative;}
+.deliverables li::before{content:'→';position:absolute;left:0;color:var(--ember);font-size:0.75rem;}
+.service-impact{padding:2rem;background:var(--ghost);border-left:2px solid var(--ember);}
+.service-impact-label{font-family:var(--font-mono);font-size:0.58rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--ember);margin-bottom:0.75rem;}
+.service-impact-text{font-family:var(--font-display);font-size:1rem;font-weight:700;line-height:1.5;}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5px;background:var(--rule);height:100%;}
+.detail-cell{background:var(--void);padding:3rem;display:flex;flex-direction:column;justify-content:flex-end;}
+.detail-cell-num{font-family:var(--font-display);font-size:3rem;font-weight:800;line-height:1;margin-bottom:0.75rem;}
+.detail-cell-label{font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);}
+.detail-cell-body{font-size:0.85rem;line-height:1.7;color:var(--muted);margin-top:0.5rem;}
+.detail-cell.accent{background:rgba(255,77,28,0.06);}
+
+/* HOW WE WORK */
+.how-section{border-top:1px solid var(--rule);}
+.how-header{padding:4rem 3rem 3rem;border-bottom:1px solid var(--rule);display:flex;justify-content:space-between;align-items:flex-end;}
+.how-header h2{font-family:var(--font-display);font-size:clamp(2rem,4vw,3rem);font-weight:800;letter-spacing:-0.03em;}
+.how-steps{display:grid;grid-template-columns:repeat(4,1fr);}
+.how-step{padding:3.5rem 2.5rem;border-right:1px solid var(--rule);position:relative;}
+.how-step:last-child{border-right:none;}
+.how-step::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:transparent;transition:background 0.4s;}
+.how-step:hover::before{background:var(--ember);}
+.step-num{font-family:var(--font-mono);font-size:0.6rem;color:var(--ember);letter-spacing:0.15em;margin-bottom:2.5rem;}
+.step-title{font-family:var(--font-display);font-size:1.2rem;font-weight:700;line-height:1.3;margin-bottom:1rem;}
+.step-desc{font-size:0.82rem;line-height:1.75;color:var(--muted);}
+.step-duration{margin-top:1.5rem;font-family:var(--font-mono);font-size:0.58rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,77,28,0.6);}
+
+/* FORMATS */
+.formats{border-top:1px solid var(--rule);padding:6rem 3rem;}
+.formats-header{margin-bottom:4rem;}
+.formats-header h2{font-family:var(--font-display);font-size:clamp(2rem,3.5vw,2.8rem);font-weight:800;letter-spacing:-0.03em;margin-bottom:1rem;}
+.formats-header p{font-size:0.95rem;color:var(--muted);max-width:480px;line-height:1.75;}
+.formats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5px;background:var(--rule);}
+.format-card{background:var(--void);padding:3rem;transition:background 0.3s;position:relative;overflow:hidden;}
+.format-card:hover{background:var(--ghost);}
+.format-card::after{content:attr(data-label);position:absolute;top:2.5rem;right:2.5rem;font-family:var(--font-mono);font-size:0.55rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--ember);border:1px solid rgba(255,77,28,0.3);padding:0.3rem 0.6rem;}
+.format-title{font-family:var(--font-display);font-size:1.4rem;font-weight:700;line-height:1.3;margin-bottom:0.5rem;margin-top:1rem;}
+.format-desc{font-size:0.85rem;line-height:1.75;color:var(--muted);margin-top:1rem;}
+.format-ideal{margin-top:2rem;font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(240,236,224,0.3);}
+.format-ideal strong{color:var(--muted);}
+
+/* CTA */
+.cta-strip{border-top:1px solid var(--rule);padding:6rem 3rem;display:grid;grid-template-columns:1fr auto;align-items:center;gap:4rem;background:linear-gradient(135deg,rgba(255,77,28,0.05) 0%,transparent 60%);}
+.cta-strip h2{font-family:var(--font-display);font-size:clamp(2.5rem,5vw,4rem);font-weight:800;letter-spacing:-0.03em;line-height:1;}
+.cta-strip h2 em{color:var(--ember);font-style:normal;}
+.btn-primary{font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--void);background:var(--ember);padding:0.9rem 2rem;text-decoration:none;transition:opacity 0.2s;display:inline-flex;align-items:center;gap:0.5rem;white-space:nowrap;}
+.btn-primary:hover{opacity:0.85;}
+
+footer{border-top:1px solid var(--rule);padding:3rem;display:grid;grid-template-columns:1fr 1fr 1fr;gap:2rem;align-items:end;}
+.footer-brand{font-family:var(--font-display);font-size:2rem;font-weight:800;letter-spacing:-0.02em;}
+.footer-brand span{color:var(--ember);}
+.footer-links{display:flex;flex-direction:column;gap:0.5rem;}
+.footer-links a{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.2s;}
+.footer-links a:hover{color:var(--paper);}
+.footer-meta{text-align:right;font-family:var(--font-mono);font-size:0.58rem;color:var(--muted);letter-spacing:0.1em;line-height:2;}
+.footer-meta .ember{color:var(--ember);}
+
+@media(max-width:1024px){.service-inner{grid-template-columns:1fr;}.service-inner.reverse{direction:ltr;}.service-info{border-right:none;border-bottom:1px solid var(--rule);}.service-inner.reverse .service-info{border-left:none;border-bottom:1px solid var(--rule);}.how-steps{grid-template-columns:repeat(2,1fr);}.how-step:nth-child(2){border-right:none;}.how-step:nth-child(3){border-top:1px solid var(--rule);}.how-step:nth-child(3),.how-step:nth-child(4){border-top:1px solid var(--rule);}.formats-grid{grid-template-columns:1fr;}}
+@media(max-width:768px){body{cursor:auto;}.cursor-dot,.cursor-ring{display:none;}nav{padding:1.25rem 1.5rem;}.nav-links{display:none;}.page-hero{padding:8rem 1.5rem 3rem;}.service-info{padding:3rem 1.5rem;}.service-detail{padding:3rem 1.5rem;}.how-steps{grid-template-columns:1fr;}.how-step{border-right:none;border-bottom:1px solid var(--rule);}.formats{padding:4rem 1.5rem;}.cta-strip{grid-template-columns:1fr;padding:4rem 1.5rem;}footer{grid-template-columns:1fr;padding:2rem 1.5rem;}.footer-meta{text-align:left;}}
+</style>
+</head>
+<body>
+<div class="cursor-dot" id="cursor-dot"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<nav id="nav">
+  <a href="index.html" class="nav-logo">
+    <svg width="24" height="24" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M14 2C14 2 8 8 8 14C8 17.5 10 20 10 20C10 20 9 18 10 16C11 14 13 13 13 13C13 13 11 17 14 19C17 21 18 18 18 18C18 18 20 16.5 20 14C20 10 17 6 14 2Z" fill="#ff4d1c"/>
+      <path d="M14 26C11 26 9 24 9 22C9 20 11 19 11 19C11 19 10.5 21 12 22C13 22.8 14 22 14 22C14 22 15 22.8 16 22C17.5 21 17 19 17 19C17 19 19 20 19 22C19 24 17 26 14 26Z" fill="#ff4d1c" opacity="0.6"/>
+    </svg>
+    Acutis
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="manifest.html">Manifest</a></li>
+    <li><a href="arsenal.html" class="active">Arsenal</a></li>
+    <li><a href="ignite.html">Ignite</a></li>
+  </ul>
+  <a href="ignite.html" class="nav-cta">Let's ignite →</a>
+</nav>
+
+<section class="page-hero">
+  <div class="page-hero-bg"></div>
+  <div class="page-counter">ACT-003 / ARSENAL</div>
+  <div class="page-tag">What we bring</div>
+  <h1>Four weapons.<br><em>One</em> objective: <span class="outline">results.</span></h1>
+  <p class="page-hero-sub">Not a service catalogue. An arsenal. Each capability is designed to create measurable commercial impact — and they compound when combined.</p>
+</section>
+
+<!-- SERVICE 01 -->
+<section class="service-section" id="leadership">
+  <div class="service-inner">
+    <div class="service-info reveal">
+      <div>
+        <div class="service-num">01 / Digital Leadership</div>
+        <h2 class="service-title">Leading teams that<br>actually <em>ship.</em></h2>
+        <p class="service-tagline">Digital transformation fails at the leadership layer, not the technology layer. We fix that — from inside your organisation.</p>
+        <div class="service-what">What we deliver</div>
+        <ul class="deliverables">
+          <li>Fractional CDO / digital director embedding</li>
+          <li>Digital team structure and capability assessment</li>
+          <li>OKR and digital performance framework setup</li>
+          <li>Leadership coaching for digital managers</li>
+          <li>Stakeholder alignment and board-level communication</li>
+          <li>Digital culture and ways of working transformation</li>
+        </ul>
+      </div>
+      <div class="service-impact">
+        <div class="service-impact-label">Typical impact</div>
+        <div class="service-impact-text">Teams that were stuck become teams that ship. Roadmaps stop being wishful thinking and start being execution plans.</div>
+      </div>
+    </div>
+    <div class="service-detail reveal" data-delay="100">
+      <div class="detail-grid">
+        <div class="detail-cell">
+          <div class="detail-cell-num" style="color:var(--ember);">3×</div>
+          <div class="detail-cell-label">Faster delivery cycles</div>
+          <div class="detail-cell-body">After restructuring team ways of working and removing governance bottlenecks.</div>
+        </div>
+        <div class="detail-cell accent">
+          <div class="detail-cell-num" style="color:var(--paper);">90</div>
+          <div class="detail-cell-label">Days to first impact</div>
+          <div class="detail-cell-body">Our standard onboarding gets you from assessment to execution in a single quarter.</div>
+        </div>
+        <div class="detail-cell accent" style="grid-column:span 2; background:var(--ghost);">
+          <div style="font-family:var(--font-display);font-size:1.1rem;font-weight:700;line-height:1.5;margin-bottom:0.75rem;">"Most digital problems are leadership problems in disguise."</div>
+          <div style="font-family:var(--font-mono);font-size:0.6rem;color:var(--muted);letter-spacing:0.1em;">Ward — Acutis founder</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICE 02 -->
+<section class="service-section" id="ecommerce">
+  <div class="service-inner reverse">
+    <div class="service-info reveal">
+      <div>
+        <div class="service-num">02 / Ecommerce Scaling</div>
+        <h2 class="service-title">From platform to<br><em>performance.</em></h2>
+        <p class="service-tagline">Ecommerce that converts. Channels that compound. Commercial models that survive margin pressure. We've built and scaled these — not just advised on them.</p>
+        <div class="service-what">What we deliver</div>
+        <ul class="deliverables">
+          <li>Ecommerce platform architecture and stack selection</li>
+          <li>Conversion rate optimisation and UX audit</li>
+          <li>Channel strategy (D2C, marketplace, wholesale digital)</li>
+          <li>Customer acquisition economics and unit economics modelling</li>
+          <li>Retention and lifecycle programme design</li>
+          <li>Commercial KPI framework and dashboard setup</li>
+        </ul>
+      </div>
+      <div class="service-impact">
+        <div class="service-impact-label">Typical impact</div>
+        <div class="service-impact-text">Revenue growth without proportional cost growth. The ecommerce flywheel — properly built — accelerates on its own.</div>
+      </div>
+    </div>
+    <div class="service-detail reveal" data-delay="100">
+      <div class="detail-grid">
+        <div class="detail-cell">
+          <div class="detail-cell-num" style="color:var(--ember);">+40%</div>
+          <div class="detail-cell-label">Revenue growth (Y1)</div>
+          <div class="detail-cell-body">Average first-year revenue uplift across ecommerce engagements.</div>
+        </div>
+        <div class="detail-cell">
+          <div class="detail-cell-num" style="color:var(--paper);">−28%</div>
+          <div class="detail-cell-label">CAC reduction</div>
+          <div class="detail-cell-body">Customer acquisition cost after channel architecture and attribution cleanup.</div>
+        </div>
+        <div class="detail-cell accent" style="grid-column:span 2; background:var(--ghost);">
+          <div style="font-family:var(--font-display);font-size:1.1rem;font-weight:700;line-height:1.5;margin-bottom:0.75rem;">"Ecommerce is not a channel. It's a business model. Most companies treat it like the former."</div>
+          <div style="font-family:var(--font-mono);font-size:0.6rem;color:var(--muted);letter-spacing:0.1em;">Ward — Acutis founder</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICE 03 -->
+<section class="service-section" id="ai">
+  <div class="service-inner">
+    <div class="service-info reveal">
+      <div>
+        <div class="service-num">03 / AI Transformation</div>
+        <h2 class="service-title">AI that works in<br>the <em>real world.</em></h2>
+        <p class="service-tagline">Not a keynote. Not a pilot that never scales. Practical AI integration that shows up in your cost base and output velocity — within months.</p>
+        <div class="service-what">What we deliver</div>
+        <ul class="deliverables">
+          <li>AI readiness audit and opportunity mapping</li>
+          <li>Use-case prioritisation by commercial ROI</li>
+          <li>Workflow automation design and implementation</li>
+          <li>AI tooling selection and vendor evaluation</li>
+          <li>Team training and AI adoption programmes</li>
+          <li>Governance framework and responsible AI policy</li>
+        </ul>
+      </div>
+      <div class="service-impact">
+        <div class="service-impact-label">Typical impact</div>
+        <div class="service-impact-text">Measurable cost reduction and output acceleration within 6 months. AI that your CFO can point to in the accounts.</div>
+      </div>
+    </div>
+    <div class="service-detail reveal" data-delay="100">
+      <div class="detail-grid">
+        <div class="detail-cell">
+          <div class="detail-cell-num" style="color:var(--ember);">6mo</div>
+          <div class="detail-cell-label">To measurable ROI</div>
+          <div class="detail-cell-body">Our structured AI programmes deliver P&L-visible results within two quarters.</div>
+        </div>
+        <div class="detail-cell accent">
+          <div class="detail-cell-num" style="color:var(--paper);">−35%</div>
+          <div class="detail-cell-label">Operational cost reduction</div>
+          <div class="detail-cell-body">Average operational cost reduction in content and workflow-heavy functions.</div>
+        </div>
+        <div class="detail-cell accent" style="grid-column:span 2; background:var(--ghost);">
+          <div style="font-family:var(--font-display);font-size:1.1rem;font-weight:700;line-height:1.5;margin-bottom:0.75rem;">"The companies winning with AI aren't the ones with the most tools. They're the ones with the clearest use cases."</div>
+          <div style="font-family:var(--font-mono);font-size:0.6rem;color:var(--muted);letter-spacing:0.1em;">Ward — Acutis founder</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICE 04 -->
+<section class="service-section" id="cost">
+  <div class="service-inner reverse">
+    <div class="service-info reveal">
+      <div>
+        <div class="service-num">04 / Cost Engineering</div>
+        <h2 class="service-title">Finding the margin<br>others <em>miss.</em></h2>
+        <p class="service-tagline">Ten years of financial training means we see cost structures differently. We find what's bleeding your digital P&L — and fix it without breaking what's working.</p>
+        <div class="service-what">What we deliver</div>
+        <ul class="deliverables">
+          <li>Digital cost structure audit and benchmarking</li>
+          <li>Vendor and licence portfolio rationalisation</li>
+          <li>Agency spend review and make/buy analysis</li>
+          <li>Digital team right-sizing and org design</li>
+          <li>Technology stack cost optimisation</li>
+          <li>ROI modelling for all major digital investments</li>
+        </ul>
+      </div>
+      <div class="service-impact">
+        <div class="service-impact-label">Typical impact</div>
+        <div class="service-impact-text">Most companies have 20–35% unnecessary digital cost. We find it — and redirect it toward things that grow.</div>
+      </div>
+    </div>
+    <div class="service-detail reveal" data-delay="100">
+      <div class="detail-grid">
+        <div class="detail-cell">
+          <div class="detail-cell-num" style="color:var(--ember);">20%</div>
+          <div class="detail-cell-label">Avg. digital cost saved</div>
+          <div class="detail-cell-body">Minimum typical savings identified in the first cost audit engagement.</div>
+        </div>
+        <div class="detail-cell">
+          <div class="detail-cell-num" style="color:var(--paper);">4wk</div>
+          <div class="detail-cell-label">Audit to findings</div>
+          <div class="detail-cell-body">Full digital cost audit with commercial recommendations delivered in 4 weeks.</div>
+        </div>
+        <div class="detail-cell accent" style="grid-column:span 2; background:var(--ghost);">
+          <div style="font-family:var(--font-display);font-size:1.1rem;font-weight:700;line-height:1.5;margin-bottom:0.75rem;">"Your digital cost base is your most controllable lever. Most companies don't even know what it looks like."</div>
+          <div style="font-family:var(--font-mono);font-size:0.6rem;color:var(--muted);letter-spacing:0.1em;">Ward — Acutis founder</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW WE WORK -->
+<section class="how-section">
+  <div class="how-header reveal">
+    <h2>How an engagement works</h2>
+    <span style="font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);">Our process</span>
+  </div>
+  <div class="how-steps">
+    <div class="how-step reveal">
+      <div class="step-num">Step 01</div>
+      <div class="step-title">Ignition call</div>
+      <p class="step-desc">25 minutes. No pitch. We listen to your commercial challenge and tell you honestly whether and how we can help.</p>
+      <div class="step-duration">Week 1</div>
+    </div>
+    <div class="how-step reveal" data-delay="80">
+      <div class="step-num">Step 02</div>
+      <div class="step-title">Commercial diagnostic</div>
+      <p class="step-desc">We map your digital operation against commercial outcomes. Where's value leaking? Where's growth stuck? What's the real problem?</p>
+      <div class="step-duration">Weeks 2–3</div>
+    </div>
+    <div class="how-step reveal" data-delay="160">
+      <div class="step-num">Step 03</div>
+      <div class="step-title">Impact roadmap</div>
+      <p class="step-desc">A prioritised plan with financial modelling attached. Every initiative has an expected P&L impact before we start.</p>
+      <div class="step-duration">Week 4</div>
+    </div>
+    <div class="how-step reveal" data-delay="240">
+      <div class="step-num">Step 04</div>
+      <div class="step-title">Embedded execution</div>
+      <p class="step-desc">We work inside your team. Leading, coaching, delivering. Measuring against the commercial model we built together.</p>
+      <div class="step-duration">Months 2–6+</div>
+    </div>
+  </div>
+</section>
+
+<!-- FORMATS -->
+<section class="formats">
+  <div class="formats-header reveal">
+    <div style="font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--ember);display:flex;align-items:center;gap:0.75rem;margin-bottom:1.5rem;"><span style="display:inline-block;width:24px;height:1px;background:var(--ember);"></span>How we engage</div>
+    <h2>Pick your format.</h2>
+    <p>Three ways to work with Acutis — depending on what you need and how fast you need it.</p>
+  </div>
+  <div class="formats-grid">
+    <div class="format-card reveal" data-label="Most popular">
+      <div style="font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--ember);">Format 01</div>
+      <div class="format-title">Embedded Partner</div>
+      <p class="format-desc">Ongoing fractional engagement. We become part of your leadership team — attending meetings, shaping strategy, leading execution. Typically 2–3 days per week.</p>
+      <div class="format-ideal">Ideal for: <strong>companies building digital capability long-term</strong></div>
+    </div>
+    <div class="format-card reveal" data-delay="80" data-label="Fast impact">
+      <div style="font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--ember);">Format 02</div>
+      <div class="format-title">Sprint Programme</div>
+      <p class="format-desc">A fixed 8–12 week intensive. Defined scope, defined deliverables, defined commercial outcomes. Diagnostic to impact plan to execution.</p>
+      <div class="format-ideal">Ideal for: <strong>companies with a specific problem to solve fast</strong></div>
+    </div>
+    <div class="format-card reveal" data-delay="160" data-label="Low commitment">
+      <div style="font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--ember);">Format 03</div>
+      <div class="format-title">Advisory Retainer</div>
+      <p class="format-desc">Strategic guidance on demand. Monthly calls, async support, decision review, and a direct line to someone who understands both the numbers and the digital.</p>
+      <div class="format-ideal">Ideal for: <strong>leaders who need a thinking partner, not a team</strong></div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-strip reveal">
+  <h2>Which weapon<br>do you <em>need?</em></h2>
+  <a href="ignite.html" class="btn-primary" style="font-size:0.75rem;padding:1.1rem 2.5rem;">Talk to us →</a>
+</section>
+
+<footer>
+  <div>
+    <div class="footer-brand">Acutis<span>.</span></div>
+    <div style="font-family:var(--font-mono);font-size:0.58rem;color:var(--muted);letter-spacing:0.1em;margin-top:0.75rem;">Digital Business Partners</div>
+  </div>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="manifest.html">Manifest</a>
+    <a href="arsenal.html">Arsenal</a>
+    <a href="ignite.html">Ignite</a>
+  </div>
+  <div class="footer-meta">
+    <div>acut.is</div>
+    <div class="ember">Named for Carlo Acutis</div>
+    <div>Patron saint of the internet</div>
+    <div style="margin-top:0.5rem;">© 2026 Acutis</div>
+  </div>
+</footer>
+
+<script>
+const dot=document.getElementById('cursor-dot'),ring=document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px';});
+(function anim(){rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(anim);})();
+document.querySelectorAll('a,button').forEach(el=>{el.addEventListener('mouseenter',()=>ring.classList.add('hover'));el.addEventListener('mouseleave',()=>ring.classList.remove('hover'));});
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>{nav.style.background=window.scrollY>80?'rgba(8,8,8,0.97)':'linear-gradient(to bottom,rgba(8,8,8,0.95) 0%,transparent 100%)';});
+const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),e.target.dataset.delay||0);}),{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>

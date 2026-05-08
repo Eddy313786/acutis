@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ignite — Acutis</title>
+<meta name="description" content="Start the conversation. No pitch. No deck. Just a direct talk about your digital challenge.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Space+Grotesk:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--void:#080808;--paper:#f0ece0;--ember:#ff4d1c;--ghost:rgba(240,236,224,0.06);--rule:rgba(240,236,224,0.1);--muted:rgba(240,236,224,0.38);--font-display:'Syne',sans-serif;--font-body:'Space Grotesk',sans-serif;--font-mono:'Space Mono',monospace;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--void);color:var(--paper);font-family:var(--font-body);font-weight:300;overflow-x:hidden;cursor:none;}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");pointer-events:none;z-index:9000;opacity:0.025;}
+.cursor-dot{position:fixed;width:6px;height:6px;background:var(--ember);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);}
+.cursor-ring{position:fixed;width:32px;height:32px;border:1px solid var(--ember);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width 0.3s,height 0.3s,border-color 0.3s;opacity:0.6;}
+.cursor-ring.hover{width:56px;height:56px;border-color:var(--paper);opacity:1;}
+nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;justify-content:space-between;align-items:center;padding:1.75rem 3rem;background:rgba(8,8,8,0.97);transition:background 0.3s;}
+.nav-logo{font-family:var(--font-display);font-size:1.1rem;font-weight:800;color:var(--paper);text-decoration:none;display:flex;align-items:center;gap:0.6rem;}
+.nav-links{display:flex;align-items:center;gap:0.25rem;list-style:none;}
+.nav-links a{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);text-decoration:none;padding:0.45rem 0.9rem;border:1px solid transparent;transition:color 0.2s,border-color 0.2s;}
+.nav-links a:hover{color:var(--paper);border-color:var(--rule);}
+.nav-links a.active{color:var(--ember);border-color:rgba(255,77,28,0.3);}
+.nav-cta{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--void);background:var(--ember);padding:0.55rem 1.25rem;text-decoration:none;transition:opacity 0.2s;}
+.nav-cta:hover{opacity:0.85;}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity 0.8s ease,transform 0.8s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+@keyframes pulse{0%,100%{opacity:0.6;}50%{opacity:1;}}
+
+/* IGNITE HERO */
+.ignite-hero{
+  min-height:100vh;
+  display:grid;grid-template-columns:1fr 1fr;
+}
+.ignite-left{
+  padding:9rem 3rem 4rem;
+  border-right:1px solid var(--rule);
+  display:flex;flex-direction:column;justify-content:space-between;
+  background:linear-gradient(160deg,rgba(255,77,28,0.07) 0%,transparent 50%);
+  position:relative;overflow:hidden;
+}
+.ignite-left-bg{
+  position:absolute;bottom:-100px;left:-100px;
+  width:500px;height:500px;
+  background:radial-gradient(circle,rgba(255,77,28,0.1) 0%,transparent 70%);
+  pointer-events:none;
+}
+.ignite-right{
+  padding:9rem 3rem 4rem;
+  display:flex;flex-direction:column;justify-content:center;
+}
+.ignite-tag{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--ember);display:flex;align-items:center;gap:0.75rem;margin-bottom:2rem;opacity:0;animation:fadeUp 0.7s 0.2s forwards;}
+.ignite-tag::before{content:'';width:24px;height:1px;background:var(--ember);}
+.ignite-headline{font-family:var(--font-display);font-size:clamp(3rem,7vw,6rem);font-weight:800;line-height:0.95;letter-spacing:-0.03em;opacity:0;animation:fadeUp 0.8s 0.35s forwards;}
+.ignite-headline em{color:var(--ember);font-style:normal;}
+.ignite-promise{margin-top:3rem;opacity:0;animation:fadeUp 0.8s 0.55s forwards;}
+.ignite-promise-items{display:flex;flex-direction:column;gap:0;}
+.promise-item{
+  display:flex;align-items:flex-start;gap:1rem;
+  padding:1.25rem 0;border-bottom:1px solid var(--rule);
+}
+.promise-item:first-child{border-top:1px solid var(--rule);}
+.promise-check{
+  width:20px;height:20px;
+  border:1px solid var(--ember);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-top:0.1rem;
+  font-size:0.6rem;color:var(--ember);
+}
+.promise-text{font-size:0.88rem;line-height:1.6;color:var(--muted);}
+.promise-text strong{color:var(--paper);font-weight:400;}
+
+/* CONTACT FORM */
+.contact-form-wrap{opacity:0;animation:fadeUp 0.8s 0.4s forwards;}
+.contact-form-label{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);margin-bottom:2.5rem;display:flex;align-items:center;gap:0.75rem;}
+.contact-form-label::before{content:'';width:24px;height:1px;background:var(--muted);}
+.form-group{margin-bottom:1.5rem;}
+.form-group label{display:block;font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:0.6rem;}
+.form-group input,.form-group textarea,.form-group select{
+  width:100%;background:transparent;border:none;border-bottom:1px solid var(--rule);
+  padding:0.75rem 0;color:var(--paper);font-family:var(--font-body);font-size:0.95rem;font-weight:300;
+  outline:none;transition:border-color 0.2s;
+  -webkit-appearance:none;
+}
+.form-group select{cursor:pointer;}
+.form-group select option{background:var(--void);color:var(--paper);}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--ember);}
+.form-group input::placeholder,.form-group textarea::placeholder{color:rgba(240,236,224,0.2);}
+.form-group textarea{resize:none;height:100px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;}
+.submit-btn{
+  width:100%;
+  font-family:var(--font-mono);font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--void);background:var(--ember);
+  border:none;padding:1.1rem 2rem;cursor:pointer;
+  transition:opacity 0.2s;margin-top:1rem;
+  display:flex;align-items:center;justify-content:center;gap:0.75rem;
+}
+.submit-btn:hover{opacity:0.85;}
+.form-disclaimer{font-family:var(--font-mono);font-size:0.55rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(240,236,224,0.2);text-align:center;margin-top:1rem;line-height:1.6;}
+
+/* DIRECT CONTACT */
+.direct-contact{border-top:1px solid var(--rule);}
+.direct-grid{display:grid;grid-template-columns:repeat(3,1fr);}
+.direct-item{
+  padding:4rem 3rem;border-right:1px solid var(--rule);
+  display:flex;flex-direction:column;justify-content:space-between;
+  transition:background 0.3s;
+}
+.direct-item:last-child{border-right:none;}
+.direct-item:hover{background:var(--ghost);}
+.direct-type{font-family:var(--font-mono);font-size:0.6rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:2rem;}
+.direct-value{font-family:var(--font-display);font-size:1.2rem;font-weight:700;line-height:1.4;margin-bottom:1rem;}
+.direct-value a{color:var(--ember);text-decoration:none;border-bottom:1px solid rgba(255,77,28,0.3);padding-bottom:2px;transition:opacity 0.2s;}
+.direct-value a:hover{opacity:0.75;}
+.direct-desc{font-size:0.82rem;color:var(--muted);line-height:1.65;}
+
+/* FAQ */
+.faq{border-top:1px solid var(--rule);padding:6rem 3rem;}
+.faq-header{margin-bottom:4rem;}
+.faq-header h2{font-family:var(--font-display);font-size:clamp(2rem,3.5vw,2.8rem);font-weight:800;letter-spacing:-0.03em;}
+.faq-list{display:grid;grid-template-columns:1fr 1fr;gap:0;}
+.faq-item{padding:2.5rem 0;border-bottom:1px solid var(--rule);}
+.faq-item:nth-child(odd){padding-right:4rem;border-right:1px solid var(--rule);}
+.faq-item:nth-child(even){padding-left:4rem;}
+.faq-q{font-family:var(--font-display);font-size:1rem;font-weight:700;line-height:1.4;margin-bottom:1rem;}
+.faq-a{font-size:0.875rem;color:var(--muted);line-height:1.75;}
+
+footer{border-top:1px solid var(--rule);padding:3rem;display:grid;grid-template-columns:1fr 1fr 1fr;gap:2rem;align-items:end;}
+.footer-brand{font-family:var(--font-display);font-size:2rem;font-weight:800;letter-spacing:-0.02em;}
+.footer-brand span{color:var(--ember);}
+.footer-links{display:flex;flex-direction:column;gap:0.5rem;}
+.footer-links a{font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color 0.2s;}
+.footer-links a:hover{color:var(--paper);}
+.footer-meta{text-align:right;font-family:var(--font-mono);font-size:0.58rem;color:var(--muted);letter-spacing:0.1em;line-height:2;}
+.footer-meta .ember{color:var(--ember);}
+
+/* Live indicator */
+.live-dot{display:inline-block;width:6px;height:6px;background:var(--ember);border-radius:50%;animation:pulse 2s infinite;margin-right:0.4rem;}
+
+@media(max-width:768px){body{cursor:auto;}.cursor-dot,.cursor-ring{display:none;}nav{padding:1.25rem 1.5rem;}.nav-links{display:none;}.ignite-hero{grid-template-columns:1fr;}.ignite-left{padding:8rem 1.5rem 3rem;border-right:none;border-bottom:1px solid var(--rule);}.ignite-right{padding:3rem 1.5rem;}.direct-grid{grid-template-columns:1fr;}.direct-item{border-right:none;}.form-row{grid-template-columns:1fr;}.faq{padding:4rem 1.5rem;}.faq-list{grid-template-columns:1fr;}.faq-item:nth-child(odd){padding-right:0;border-right:none;}.faq-item:nth-child(even){padding-left:0;}footer{grid-template-columns:1fr;padding:2rem 1.5rem;}.footer-meta{text-align:left;}}
+</style>
+</head>
+<body>
+<div class="cursor-dot" id="cursor-dot"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<nav id="nav">
+  <a href="index.html" class="nav-logo">
+    <svg width="24" height="24" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M14 2C14 2 8 8 8 14C8 17.5 10 20 10 20C10 20 9 18 10 16C11 14 13 13 13 13C13 13 11 17 14 19C17 21 18 18 18 18C18 18 20 16.5 20 14C20 10 17 6 14 2Z" fill="#ff4d1c"/>
+      <path d="M14 26C11 26 9 24 9 22C9 20 11 19 11 19C11 19 10.5 21 12 22C13 22.8 14 22 14 22C14 22 15 22.8 16 22C17.5 21 17 19 17 19C17 19 19 20 19 22C19 24 17 26 14 26Z" fill="#ff4d1c" opacity="0.6"/>
+    </svg>
+    Acutis
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="manifest.html">Manifest</a></li>
+    <li><a href="arsenal.html">Arsenal</a></li>
+    <li><a href="ignite.html" class="active">Ignite</a></li>
+  </ul>
+  <a href="ignite.html" class="nav-cta" style="opacity:0.4;pointer-events:none;">Let's ignite →</a>
+</nav>
+
+<section class="ignite-hero">
+  <div class="ignite-left">
+    <div class="ignite-left-bg"></div>
+    <div>
+      <div class="ignite-tag"><span class="live-dot"></span>Taking new engagements</div>
+      <h1 class="ignite-headline">Let's talk<br>about your<br><em>numbers.</em></h1>
+    </div>
+    <div class="ignite-promise">
+      <div style="font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:1.5rem;">What to expect</div>
+      <div class="ignite-promise-items">
+        <div class="promise-item">
+          <div class="promise-check">✓</div>
+          <div class="promise-text"><strong>25 minutes.</strong> No wasted time. We come prepared and expect the same.</div>
+        </div>
+        <div class="promise-item">
+          <div class="promise-check">✓</div>
+          <div class="promise-text"><strong>No pitch deck.</strong> We listen first. We'll tell you honestly whether and how we can help.</div>
+        </div>
+        <div class="promise-item">
+          <div class="promise-check">✓</div>
+          <div class="promise-text"><strong>Commercial thinking from day one.</strong> We'll frame your challenge in P&L terms before we leave the first call.</div>
+        </div>
+        <div class="promise-item">
+          <div class="promise-check">✓</div>
+          <div class="promise-text"><strong>A response within 24 hours.</strong> If it's a good fit, you'll know quickly. If not, we'll say so.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ignite-right">
+    <div class="contact-form-wrap">
+      <div class="contact-form-label">Send a message</div>
+      <form id="contact-form" onsubmit="handleSubmit(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name">Your name</label>
+            <input type="text" id="name" name="name" placeholder="Ward Vermeersch" required>
+          </div>
+          <div class="form-group">
+            <label for="company">Company</label>
+            <input type="text" id="company" name="company" placeholder="Acme Corp">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="email">Email address</label>
+          <input type="email" id="email" name="email" placeholder="ward@company.com" required>
+        </div>
+        <div class="form-group">
+          <label for="challenge">What's your challenge?</label>
+          <select id="challenge" name="challenge">
+            <option value="">Select the closest fit</option>
+            <option>Digital team leadership</option>
+            <option>Ecommerce scaling</option>
+            <option>AI transformation</option>
+            <option>Digital cost reduction</option>
+            <option>Something else entirely</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="message">Tell us more</label>
+          <textarea id="message" name="message" placeholder="What's the commercial challenge you're trying to solve?"></textarea>
+        </div>
+        <button type="submit" class="submit-btn" id="submit-btn">
+          <span id="btn-text">Ignite the conversation →</span>
+        </button>
+        <div class="form-disclaimer">No spam. No newsletters. Just a direct conversation.</div>
+      </form>
+      <div id="form-success" style="display:none;padding:3rem;background:rgba(255,77,28,0.08);border:1px solid rgba(255,77,28,0.3);text-align:center;">
+        <div style="font-family:var(--font-display);font-size:1.5rem;font-weight:800;margin-bottom:1rem;">Message received.</div>
+        <div style="font-size:0.9rem;color:var(--muted);line-height:1.75;">We'll be back within 24 hours. In the meantime, read our <a href="manifest.html" style="color:var(--ember);">manifest</a>.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DIRECT CONTACT -->
+<section class="direct-contact">
+  <div class="direct-grid">
+    <div class="direct-item reveal">
+      <div class="direct-type">Email</div>
+      <div class="direct-value"><a href="mailto:ward@acut.is">ward@acut.is</a></div>
+      <div class="direct-desc">For detailed briefs, RFPs, or when you'd rather write first.</div>
+    </div>
+    <div class="direct-item reveal" data-delay="80">
+      <div class="direct-type">LinkedIn</div>
+      <div class="direct-value"><a href="https://www.linkedin.com/in/acutis" target="_blank">linkedin.com/in/acutis</a></div>
+      <div class="direct-desc">Follow along. See our thinking. Connect before the conversation.</div>
+    </div>
+    <div class="direct-item reveal" data-delay="160">
+      <div class="direct-type">Based in</div>
+      <div class="direct-value">Belgium.<br>Working across Europe.</div>
+      <div class="direct-desc">Remote-first. On-site when it matters. We go where the work needs us.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq">
+  <div class="faq-header reveal">
+    <div style="font-family:var(--font-mono);font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--ember);display:flex;align-items:center;gap:0.75rem;margin-bottom:1.5rem;"><span style="display:inline-block;width:24px;height:1px;background:var(--ember);"></span>Before you ask</div>
+    <h2>Common questions.</h2>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item reveal">
+      <div class="faq-q">Are you a solo consultant or a team?</div>
+      <div class="faq-a">Acutis is Ward — with a trusted network of specialists we bring in when the engagement needs it. You always work directly with the person who knows your business. No account managers, no juniors running your work.</div>
+    </div>
+    <div class="faq-item reveal" data-delay="80">
+      <div class="faq-q">What industries do you work in?</div>
+      <div class="faq-a">Retail, ecommerce, financial services, media, B2B services. If you have a digital revenue model and a P&L that needs improving, we're interested in the conversation.</div>
+    </div>
+    <div class="faq-item reveal">
+      <div class="faq-q">How quickly can you start?</div>
+      <div class="faq-a">Typically 2–3 weeks from first conversation to kick-off. We don't drag out the commercial process. If it's a fit, we move.</div>
+    </div>
+    <div class="faq-item reveal" data-delay="80">
+      <div class="faq-q">What does it cost?</div>
+      <div class="faq-a">We price by engagement format, not by the hour. An honest conversation about scope and budget happens on the first call. We don't do hidden costs or scope creep — the commercial model is agreed upfront.</div>
+    </div>
+    <div class="faq-item reveal">
+      <div class="faq-q">Do you work with startups?</div>
+      <div class="faq-a">Selectively. We prefer companies with revenue, a team, and a real commercial problem to solve. If that's you — even at an early stage — we're open to the conversation.</div>
+    </div>
+    <div class="faq-item reveal" data-delay="80">
+      <div class="faq-q">Why 'Acutis'?</div>
+      <div class="faq-a">Carlo Acutis. 1991–2006. Taught himself to code, built websites for the Church, became the patron saint of the internet. A reminder that technology, used with purpose, serves something greater than itself. That's the business we're trying to build.</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>
+    <div class="footer-brand">Acutis<span>.</span></div>
+    <div style="font-family:var(--font-mono);font-size:0.58rem;color:var(--muted);letter-spacing:0.1em;margin-top:0.75rem;">Digital Business Partners</div>
+  </div>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="manifest.html">Manifest</a>
+    <a href="arsenal.html">Arsenal</a>
+    <a href="ignite.html">Ignite</a>
+  </div>
+  <div class="footer-meta">
+    <div>acut.is</div>
+    <div class="ember">Named for Carlo Acutis</div>
+    <div>Patron saint of the internet</div>
+    <div style="margin-top:0.5rem;">© 2026 Acutis</div>
+  </div>
+</footer>
+
+<script>
+const dot=document.getElementById('cursor-dot'),ring=document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px';});
+(function anim(){rx+=(mx-rx)*0.12;ry+=(my-ry)*0.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(anim);})();
+document.querySelectorAll('a,button').forEach(el=>{el.addEventListener('mouseenter',()=>ring.classList.add('hover'));el.addEventListener('mouseleave',()=>ring.classList.remove('hover'));});
+const obs=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('visible'),e.target.dataset.delay||0);}),{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+function handleSubmit(e){
+  e.preventDefault();
+  const btn=document.getElementById('submit-btn');
+  const btnText=document.getElementById('btn-text');
+  btn.disabled=true;
+  btnText.textContent='Sending...';
+  setTimeout(()=>{
+    document.getElementById('contact-form').style.display='none';
+    document.getElementById('form-success').style.display='block';
+  },800);
+}
+</script>
+</body>
+</html>
